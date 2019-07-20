@@ -7,6 +7,18 @@ victim_1:
 victim_2:
     target: 'dimkarakostas'
     snifferendpoint: 'http://127.0.0.1:9000'
-    sourceip: '192.168.43.246'
+    sourceip: '192.168.174.131'
+    realtimeurl: 'http://127.0.0.1:3031'
+    interface: 'eth0'
+victim_3:
+    target: 'helpguide'
+    snifferendpoint: 'http://127.0.0.1:9000'
+    sourceip: '192.168.174.131'
+    realtimeurl: 'http://127.0.0.1:3031'
+    interface: 'eth0'
+victim_4:
+    target: 'fst'
+    snifferendpoint: 'http://127.0.0.1:9000'
+    sourceip: '192.168.174.131'
     realtimeurl: 'http://127.0.0.1:3031'
     interface: 'eth0'
