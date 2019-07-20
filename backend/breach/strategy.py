@@ -15,7 +15,7 @@ import random
 
 logger = logging.getLogger(__name__)
 
-CALIBRATION_STEP = 0.1
+CALIBRATION_STEP = 0.4
 CALIBRATION_SAMPLESET_WINDOW_CHECK = 3
 
 

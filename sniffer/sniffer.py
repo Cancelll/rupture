@@ -10,6 +10,8 @@ logger = logging.getLogger('sniffer')
 # TLS Header
 TLS_HEADER_LENGTH = 5
 TLS_CONTENT_TYPE = 0
+TLS_VERSION_MAJOR = 1
+TLS_VERSION_MIOR = 2
 TLS_LENGTH_MAJOR = 3
 TLS_LENGTH_MINOR = 4
 
@@ -134,10 +136,10 @@ class Sniffer(threading.Thread):
         return self._recording
 
     def follow_stream(self, stream):
-        stream_data = b''
+        stream_data = []
         for pkt in stream:
             if Raw in pkt:
-                stream_data += str(pkt[Raw])
+                stream_data.append(bytes(pkt[Raw]))
         return stream_data
 
     def parse_capture(self):
@@ -167,33 +169,57 @@ class Sniffer(threading.Thread):
         }
 
     def get_application_data(self, payload_data):
-        '''
-        Parse aggregated packet data and keep only TLS application data.
-
-        Argument:
-            payload_data - binary string of TLS layer packet payload
-
-        Returns a string of aggregated binary TLS application data,
-        including record headers.
-        '''
         application_data = []
-
-        while payload_data:
-            content_type = ord(payload_data[TLS_CONTENT_TYPE])
-            length = 256 * ord(payload_data[TLS_LENGTH_MAJOR]) + ord(payload_data[TLS_LENGTH_MINOR])
-
-            # payload_data should begin with a valid TLS header
-            if content_type not in TLS_CONTENT:
-                logger.warning('Invalid payload data.')
-
-                # Flush invalid captured packets
-                raise ValueError('Captured packets were not properly constructed')
-
-            # Keep only TLS application data payload
-            if content_type == TLS_APPLICATION_DATA:
-                application_data.append(binascii.hexlify(payload_data[TLS_HEADER_LENGTH:TLS_HEADER_LENGTH + length]))
-
-            # Parse all TLS records in the aggregated payload data
-            payload_data = payload_data[TLS_HEADER_LENGTH + length:]
-
+        for i in range(len(payload_data)):
+            content_type = ord(payload_data[i][TLS_CONTENT_TYPE])
+            length = 256 * ord(payload_data[i][TLS_LENGTH_MAJOR]) + ord(payload_data[i][TLS_LENGTH_MINOR])
+            version_major = ord(payload_data[i][TLS_VERSION_MAJOR])
+            version_minor = ord(payload_data[i][TLS_VERSION_MIOR])
+            last_type = 0
+            # if it is the first packet
+            if content_type in TLS_CONTENT and version_major == 3 and version_minor < 5:
+                last_type = content_type
+                if content_type == 23:
+                    application_data.append(payload_data[i][TLS_HEADER_LENGTH:])
+            else:
+                if last_type == 23:
+                    try:
+                        application_data[-1] += payload_data[i]
+                    except:
+                        logger.warning("something is wrong at sniffer.py:189")
+        for i in range(len(application_data)):
+            application_data[i] = binascii.hexlify(application_data[i])
         return application_data
+
+
+    # def get_application_data(self, payload_data):
+    #     '''
+    #     Parse aggregated packet data and keep only TLS application data.
+
+    #     Argument:
+    #         payload_data - binary string of TLS layer packet payload
+
+    #     Returns a string of aggregated binary TLS application data,
+    #     including record headers.
+    #     '''
+    #     application_data = []
+
+    #     while payload_data:
+    #         content_type = ord(payload_data[TLS_CONTENT_TYPE])
+    #         length = 256 * ord(payload_data[TLS_LENGTH_MAJOR]) + ord(payload_data[TLS_LENGTH_MINOR])
+
+    #         # payload_data should begin with a valid TLS header
+    #         if content_type not in TLS_CONTENT:
+    #             logger.warning('Invalid payload data.')
+    #             logger.warning(' '.join("{:02x}".format(ord(c)) for c in payload_data))
+    #             # Flush invalid captured packets
+    #             raise ValueError('Captured packets were not properly constructed')
+
+    #         # Keep only TLS application data payload
+    #         if content_type == TLS_APPLICATION_DATA:
+    #             application_data.append(binascii.hexlify(payload_data[TLS_HEADER_LENGTH:TLS_HEADER_LENGTH + length]))
+
+    #         # Parse all TLS records in the aggregated payload data
+    #         payload_data = payload_data[TLS_HEADER_LENGTH + length:]
+
+    #     return application_data
