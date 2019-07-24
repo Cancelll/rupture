@@ -72,18 +72,27 @@ class Sniffer(threading.Thread):
         self.record_lock = threading.Lock()
 
     def record_sniffing(self):
-        logger.debug('Acquiring lock to start _recording')
+        # logger.debug('Acquiring lock to start _recording')
         self.record_lock.acquire()
 
-        logger.debug('Lock acquired, starting recording')
+        # logger.debug('Lock acquired, starting recording')
         self._recording = True
 
-        logger.debug('Releasing lock from start _recording')
+        # logger.debug('Releasing lock from start _recording')
         self.record_lock.release()
 
     def run(self):
         # Capture only response packets
-        capture_filter = 'tcp and src host {} and src port {} and dst host {}'.format(self.destination_ip, self.destination_port, self.source_ip)
+        # capture_filter = 'tcp and src host {} and src port {} and dst host {}'.format(self.destination_ip, self.destination_port, self.source_ip)
+        capture_filter = ''
+        iplist = open(r"./backend/current_iplist.txt", "r")
+        while True:
+            ip = iplist.readline()[:-2]
+            if ip == '':
+                break
+            capture_filter = capture_filter + 'src host ' + ip
+            capture_filter = capture_filter + ' or dst host ' + ip + ' or '
+        capture_filter = capture_filter[:-3] + 'and tcp'
 
         # Start blocking sniff function and parse captured packets
         sniff(
@@ -93,10 +102,10 @@ class Sniffer(threading.Thread):
         )
 
     def process_packet(self, pkt):
-        logger.debug('Acquiring lock to process packet')
+        # logger.debug('Acquiring lock to process packet')
         self.record_lock.acquire()
 
-        logger.debug('Lock acquired, parsing packet')
+        # logger.debug('Lock acquired, parsing packet')
         if self._recording:
             # Check for retransmission of same packet
             try:
@@ -111,7 +120,7 @@ class Sniffer(threading.Thread):
 
             self.port_streams[pkt.dport].append(pkt)
 
-        logger.debug('Releasing lock from packet process')
+        # logger.debug('Releasing lock from packet process')
         self.record_lock.release()
 
     def get_capture(self):
@@ -122,14 +131,14 @@ class Sniffer(threading.Thread):
 
     def stop(self):
         # Stop recording whatever you listen and erase your memory
-        logger.debug('Acquiring lock to stop recording')
+        # logger.debug('Acquiring lock to stop recording')
         self.record_lock.acquire()
 
-        logger.debug('Lock acquired, stopping recording')
+        # logger.debug('Lock acquired, stopping recording')
         self._recording = False
         self.port_streams = collections.defaultdict(lambda: [])
 
-        logger.debug('Releasing lock from stop recording')
+        # logger.debug('Releasing lock from stop recording')
         self.record_lock.release()
 
     def is_recording(self):
@@ -176,6 +185,7 @@ class Sniffer(threading.Thread):
             version_major = ord(payload_data[i][TLS_VERSION_MAJOR])
             version_minor = ord(payload_data[i][TLS_VERSION_MIOR])
             last_type = 0
+            logger.debug("content_type: {0}".format(content_type))
             # if it is the first packet
             if content_type in TLS_CONTENT and version_major == 3 and version_minor < 5:
                 last_type = content_type
@@ -185,7 +195,7 @@ class Sniffer(threading.Thread):
                 if last_type == 23:
                     try:
                         application_data[-1] += payload_data[i]
-                    except:
+                    except IndexError:
                         logger.warning("something is wrong at sniffer.py:189")
         for i in range(len(application_data)):
             application_data[i] = binascii.hexlify(application_data[i])

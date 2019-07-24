@@ -1,50 +1,10 @@
-ruptureit:
-    endpoint: 'https://ruptureit.com/test.php?reflection=%s'
+web:
+    endpoint: 'https://www.anxietycanada.com?%s'
     prefix: 'imper'
     alphabet: 'abcdefghijklmnopqrstuvwxyz'
-    secretlength: 9
+    secretlength: 8
     alignmentalphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     recordscardinality: 1
     method: 'serial'
-    samplesize: 64
-    confidence_threshold: 1.0
-dionyziz:
-    endpoint: 'https://dionyziz.com/breach-test/reflect.php?ref=%s'
-    prefix: 'imper'
-    alphabet: 'abcdefghijklmnopqrstuvwxyz'
-    secretlength: 9
-    alignmentalphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    recordscardinality: 1
-    method: 'divide&conquer'
-    samplesize: 64
-    confidence_threshold: 1.0
-dimkarakostas:
-    endpoint: 'https://dimkarakostas.com/rupture/test.php?ref=%s'
-    prefix: 'imper'
-    alphabet: 'abcdefghijklmnopqrstuvwxyz'
-    secretlength: 9
-    alignmentalphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    recordscardinality: 1
-    method: 'backtracking'
-    samplesize: 64
-    confidence_threshold: 1.0
-helpguide:
-    endpoint: 'https://www.helpguide.org/?s=%s'
-    prefix: 'your '
-    alphabet: 'abcdefghijklmnopqrstuvwxyz '
-    secretlength: 9
-    alignmentalphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    recordscardinality: 1
-    method: 'backtracking'
-    samplesize: 4
-    confidence_threshold: 1.0
-fst:
-    endpoint: 'https://www.fst.com/searchresults?SearchTerm=%s#'
-    prefix: 'Talk '
-    alphabet: 'abcdefghijklmnopqrstuvwxyz '
-    secretlength: 9
-    alignmentalphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    recordscardinality: 1
-    method: 'backtracking'
-    samplesize: 4
+    samplesize: 1
     confidence_threshold: 1.0

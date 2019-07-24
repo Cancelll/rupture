@@ -15,16 +15,19 @@ def select_victim(victims):
     for i, v in enumerate(victims):
         print '\tID: {}  -  {} ({} {})'.format(i, v[0], v[1]['target'], v[1]['sourceip'])
 
-    try:
-        vic_ids = input('[*] Choose victim IDs separated by commas or leave empty to select all: ')
-        if isinstance(vic_ids, int):
-            vic_ids = (vic_ids, )
-    except (SyntaxError, NameError), err:
-        if isinstance(err, SyntaxError):
-            return [vic[1] for vic in victims]
-        elif isinstance(err, NameError):
-            print '[!] Invalid victim id.'
-            exit(1)
+    if i != 0:
+        try:
+            vic_ids = input('[*] Choose victim IDs separated by commas or leave empty to select all: ')
+            if isinstance(vic_ids, int):
+                vic_ids = (vic_ids, )
+        except (SyntaxError, NameError), err:
+            if isinstance(err, SyntaxError):
+                return [vic[1] for vic in victims]
+            elif isinstance(err, NameError):
+                print '[!] Invalid victim id.'
+                exit(1)
+    else:
+        vic_ids = (0, )
 
     assert(isinstance(vic_ids, tuple))
 

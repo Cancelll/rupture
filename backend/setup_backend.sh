@@ -3,8 +3,10 @@
 BASEDIR=$(dirname -- "$(readlink -f -- "${BASH_SOURCE}")")
 RUPTUREDIR="$HOME/.rupture"
 
-echo '[-] Flushing old database, if exists...'
-$BASEDIR/env/bin/python $BASEDIR/manage.py flush --no-input
+# echo '[-] Flushing old database, if exists...'
+# $BASEDIR/env/bin/python $BASEDIR/manage.py flush --no-input
+echo '[-] Removing old database, if exists...'
+rm -f $BASEDIR/db.sqlite3
 
 if [ -d $RUPTUREDIR ]; then
     echo "[-] Using Rupture directory in $RUPTUREDIR..."

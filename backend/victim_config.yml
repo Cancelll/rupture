@@ -1,23 +1,29 @@
-victim_1:
-    target: 'ruptureit'
-    snifferendpoint: 'http://127.0.0.1:9000'
-    sourceip: '192.168.1.70'
-    realtimeurl: 'http://127.0.0.1:3031'
-    interface: 'eno1'
-victim_2:
-    target: 'dimkarakostas'
-    snifferendpoint: 'http://127.0.0.1:9000'
-    sourceip: '192.168.174.131'
-    realtimeurl: 'http://127.0.0.1:3031'
-    interface: 'eth0'
-victim_3:
-    target: 'helpguide'
-    snifferendpoint: 'http://127.0.0.1:9000'
-    sourceip: '192.168.174.131'
-    realtimeurl: 'http://127.0.0.1:3031'
-    interface: 'eth0'
-victim_4:
-    target: 'fst'
+# victim_1:
+#     target: 'ruptureit'
+#     snifferendpoint: 'http://127.0.0.1:9000'
+#     sourceip: '192.168.1.70'
+#     realtimeurl: 'http://127.0.0.1:3031'
+#     interface: 'eno1'
+# victim_2:
+#     target: 'dimkarakostas'
+#     snifferendpoint: 'http://127.0.0.1:9000'
+#     sourceip: '192.168.174.131'
+#     realtimeurl: 'http://127.0.0.1:3031'
+#     interface: 'eth0'
+# victim_3:
+#     target: 'helpguide'
+#     snifferendpoint: 'http://127.0.0.1:9000'
+#     sourceip: '192.168.174.131'
+#     realtimeurl: 'http://127.0.0.1:3031'
+#     interface: 'eth0'
+# victim_4:
+#     target: 'fst'
+#     snifferendpoint: 'http://127.0.0.1:9000'
+#     sourceip: '192.168.174.131'
+#     realtimeurl: 'http://127.0.0.1:3031'
+#     interface: 'eth0'
+victim:
+    target: 'web'
     snifferendpoint: 'http://127.0.0.1:9000'
     sourceip: '192.168.174.131'
     realtimeurl: 'http://127.0.0.1:3031'
