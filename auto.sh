@@ -3,7 +3,7 @@
 # Parameters
 BASEDIR=$(dirname -- "$(readlink -f -- "${BASH_SOURCE}")")
 HTMLDIR="$HOME/.rupture/client/client_1"
-TIMEOUT=10	# attack each website for 60 seconds 
+TIMEOUT=60	# attack each website for 60 seconds 
 COUNT=0
 # initialize
 ps -ef | grep rupture | grep -v grep | awk '{print $2}' | xargs kill -9
@@ -17,11 +17,11 @@ for i in {1..7006}
 do
 # STEP 1: read next url from a csv file
 	j=$[i+1]
-	URL_IP=$(sed -n ${i}p ip-domain.csv)
-	URL=${URL_IP%/*}
-	IP[COUNT]=${URL_IP#*/}
-	URL_IP_NEXT=$(sed -n ${j}p ip-domain.csv)
-	URL_NEXT=${URL_IP_NEXT%/*}
+	URL_IP=$(sed -n ${i}p breach.csv)
+	URL=${URL_IP%,*}
+	IP[COUNT]=${URL_IP#*,}
+	URL_IP_NEXT=$(sed -n ${j}p breach.csv)
+	URL_NEXT=${URL_IP_NEXT%,*}
 	if [ $URL_NEXT = $URL ]
 	then
 		COUNT=$[COUNT+1]
